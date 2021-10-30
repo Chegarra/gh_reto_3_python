@@ -18,6 +18,7 @@ def anadirPlatos(nombre, precio, dicc):
     else:
         print(f'El plato ya existe')
 
+
 def seguirBucle(mensaje):
     continuar = None
     while continuar == None:
@@ -31,10 +32,12 @@ def seguirBucle(mensaje):
             print('No he entendido su respuesta')
     return continuar
 
+
 def mostrarMenu(dicc):
     print(f'{"* * * * * * * * * * MENU DEL DÍA - RESTAURANTE DEL TIO MANOLO * * * * * * * * * *":^60}')
     for key in dicc:
         print(f'{key:<64} : {dicc[key]:>7.2f}€')
+
 
 def crearMenu(dicc):
     continuar = True
@@ -43,6 +46,7 @@ def crearMenu(dicc):
         precio = int(input('Precio del plato: '))
         anadirPlatos(nombre, precio, dicc)
         continuar = seguirBucle('Introducir un plato más al menú')
+
 
 def pedirMenu(dicc):
     continuar = True
@@ -55,12 +59,27 @@ def pedirMenu(dicc):
         continuar = seguirBucle('Algo más')
     return platosPedidos
 
+
 def borrarPantalla():
     os.system('cls' if os.name == 'nt' else 'clear')
+
+
+def sacarFactura(pedido, menu, total):
+    print('{char}{titulo}{char}'.format(char='*' * 20, titulo='FACTURA'))
+    for plato in pedido:
+        if plato in menu:
+            print(f'{plato:<64} : {menu[plato]:>7.2f}€')
+            total+=menu[plato]
+        else:
+            print(f'El plato "{plato}" no se encuentra en nuestra carta')
+
+    print(f'{"TOTAL":>64} : {total:>7.2f}€')
+    return total
 
 def main():
     global platos
     global platosConsumidos
+    global total
 
     crearMenu(platos)
     borrarPantalla()
@@ -69,6 +88,8 @@ def main():
     print('Ústed ha pedido los siguientes platos:')
     for pc in platosConsumidos:
         print(pc)
+    borrarPantalla()
+    sacarFactura(platosConsumidos, platos, total)
 
 if __name__ == '__main__':
     main()
